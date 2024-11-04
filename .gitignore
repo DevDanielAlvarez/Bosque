@@ -1,0 +1,12 @@
+
+/vendor/
+
+
+composer.lock
+
+
+phpunit.xml
+
+
+/storage/*
+/bootstrap/cache/*

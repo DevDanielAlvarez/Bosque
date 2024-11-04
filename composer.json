@@ -1,0 +1,28 @@
+{
+    "name": "astro-daniel/bosque",
+    "description": "a lib for services",
+    "type": "library",
+    "require-dev": {
+        "illuminate/support": "^10.0",
+        "illuminate/database": "^10.0",
+        "pestphp/pest": "^3.5",
+        "mockery/mockery": "^1.6"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AstroDaniel\\Bosque\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "daniel",
+            "email": "skyrimdaniel11@gmail.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
