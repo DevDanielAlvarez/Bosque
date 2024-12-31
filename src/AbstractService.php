@@ -46,7 +46,7 @@ abstract class AbstractService{
      * get a fluent with data of record
      * @return \Illuminate\Support\Fluent
      */
-    public function getDataOfRecord(): Fluent{
+    public function getRecordData(): Fluent{
         return new Fluent($this->record->toArray());
     }
 }
