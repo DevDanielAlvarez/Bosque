@@ -12,3 +12,13 @@ beforeEach(function(){
 it('can set a record', function(){
     expect($this->fakeService->getRecord())->toBe($this->modelMocked);
 });
+
+it('can delete a record', function(){
+  $this->modelMocked
+    ->shouldReceive('delete')
+    ->andReturn(true);
+
+  $this->modelMocked->delete();
+
+  expect($this->modelMocked->delete())->toBe(true);
+});
