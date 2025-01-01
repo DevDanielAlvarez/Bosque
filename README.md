@@ -3,7 +3,7 @@
 
 Why Choose Bosque for Your Laravel Projects?
 
-Bosque is the perfect solution for Laravel developers looking for cleaner, more efficient, and reusable code. By integrating the AbstractService and AbstractDTO classes, the library provides powerful tools for model manipulation and data transfer within your applications.
+Bosque is the perfect solution for Laravel developers looking for cleaner, more efficient, and reusable code. By integrating the AbstractDTO class, the library provides powerful tools for data transfer within your applications.
 
 ## Install
 ```bash
