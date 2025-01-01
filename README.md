@@ -15,8 +15,6 @@ First create a file and extend the Abstract DTO, for example:
 ```php
 <?php
 
-namespace App\DTO;
-
 use AstroDaniel\Bosque\AbstractDTO;
 
 class UserDTO extends AbstractDTO
@@ -31,25 +29,23 @@ How to use dto
 #### To Array
 ```php
 <?php
-$user = User::first();
-$userDTO = new UserDTO(name : $user->name, email : $user->email);
-dd($userDTO->toArray()); // [name : "Daniel", "email" : "ddd@ddd.com"]
+$userDTO = new UserDTO(name : "Daniel", email : "ddd@ddd.com");
+$userDTO->toArray(); // [name : "Daniel", "email" : "ddd@ddd.com"]
 ```
 #### To Json
 ```php
 <?php
-$user = User::first();
-$userDTO = new UserDTO(name : $user->name, email : $user->email);
-dd($userDTO->toJson()); // "{"name":"Miss Shanelle Krajcik V","email":"iklein@example.com"}"
+
+$userDTO = new UserDTO(name : "Daniel", email : "ddd@ddd.com");
+$userDTO->toJson(); // "{"name":"Daniel","email":"ddd@ddd.com"}"
 ```
 
 #### Except
 ```php
 <?php
-$user = User::first();
-$userDTO = new UserDTO(name : $user->name, email : $user->email);
-dump($userDTO->except(properties: ['name'])->toJson()); //"{"email":"iklein@example.com"}"
-dd($userDTO->except(properties: ['email'])->toArray()); // ["name" : "Miss Shanelle Krajcik V"]
+$userDTO = new UserDTO(name : "Daniel", email : "ddd@ddd.com");
+$userDTO->except(properties: ['name'])->toJson(); //"{"email":"ddd@ddd.com"}"
+$userDTO->except(properties: ['email'])->toArray(); // ["name" : "Daniel"]
 ```
 #### You can define getters that abstract DTO will understand
 ```php
@@ -71,9 +67,8 @@ class UserDTO extends AbstractDTO
     }
 }
 
- $user = User::first();
-    $userDTO = new UserDTO(name : $user->name, email : $user->email);
-    dump($userDTO->except(['email'])->toArray()); //["name" => "MISS SHANELLE KRAJCIK V"]
+    $userDTO = new UserDTO(name : "Daniel", email : "ddd@ddd.com");
+    $userDTO->except(['email'])->toArray(); //["name" => "DANIEL"]
 ```
 
 
