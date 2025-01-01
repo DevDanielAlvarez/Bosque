@@ -70,5 +70,5 @@ class UserDTO extends AbstractDTO
     $userDTO = new UserDTO(name : "Daniel", email : "ddd@ddd.com");
     $userDTO->except(['email'])->toArray(); //["name" => "DANIEL"]
 ```
-
+*Naming Convention: The getter method should be named get followed by the name of the property, with the first letter capitalized (e.g., getName for the property $name).
 
