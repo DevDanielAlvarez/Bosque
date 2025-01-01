@@ -21,7 +21,8 @@ class AbstractDTO implements DTOInterface
       if ($this->verifyIfPropertyIsAccepted($property)) {
         continue;
       }
-      //====End Verify is blocked
+      //====End Verify is blocked ====\\
+
       //==== Start Verify Getter ====\\
       $propertyName = $property->getName();
       $getterMethod = 'get' . ucfirst($propertyName);
