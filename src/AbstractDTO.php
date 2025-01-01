@@ -23,7 +23,7 @@ class AbstractDTO implements DTOInterface
         continue;
       }
       //====End Verify is blocked
-      //==== Start Veirfy Getter ====\\
+      //==== Start Verify Getter ====\\
       $propertyName = $property->getName();
       $getterMethod = 'get' . ucfirst($propertyName);
 
@@ -34,7 +34,7 @@ class AbstractDTO implements DTOInterface
           continue;
         }
       }
-      //==== End Veirfy Getter ====\\
+      //==== End Verify Getter ====\\
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
