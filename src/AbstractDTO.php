@@ -18,9 +18,23 @@ class AbstractDTO implements DTOInterface
     $reflection = new ReflectionClass($this);
     $data  = [];
     foreach ($reflection->getProperties() as $property) {
-      if($this->verifyIfPropertyIsAccepted($property)){
+      //==== Start Verify is blocked ====\\
+      if ($this->verifyIfPropertyIsAccepted($property)) {
         continue;
       }
+      //====End Verify is blocked
+      //==== Start Veirfy Getter ====\\
+      $propertyName = $property->getName();
+      $getterMethod = 'get' . ucfirst($propertyName);
+
+      if ($reflection->hasMethod($getterMethod)) {
+        $method = $reflection->getMethod($getterMethod);
+        if ($method->isPublic()) {
+          $data[$propertyName] = $method->invoke($this);
+          continue;
+        }
+      }
+      //==== End Veirfy Getter ====\\
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
