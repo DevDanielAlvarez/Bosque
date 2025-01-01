@@ -34,3 +34,15 @@ it('can get property as array except name',function(){
   expect(array_key_exists('name',$propertiesAsArray))->toBeFalse();
 });
 
+it('can get property as json except age', function(){
+  $propertiesAsJson = $this->fakeDTO->except(properties : ['age'])->toJson();
+  var_dump($propertiesAsJson);
+  expect($propertiesAsJson)->toBe('{"name":"Daniel Alvarez de Almeida"}');
+});
+
+it('can reset except property in abstract DTO', function(){
+  $json = $this->fakeDTO->except(properties  : ['age'])->toJson();
+  expect($json)->toBe('{"name":"Daniel Alvarez de Almeida"}');
+  expect($this->fakeDTO->toJson())->toBe('{"name":"Daniel Alvarez de Almeida","age":20}');
+});
+

@@ -24,13 +24,13 @@ class AbstractDTO implements DTOInterface
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
-
+    $this->except = [];
     return $data;
   }
 
-  public function except(array $fields): self
+  public function except(array $properties): self
   {
-    $this->except = $fields;
+    $this->except = $properties;
     return $this;
   }
 
