@@ -2,4 +2,5 @@
 
 ##install
 ```
-```composer require astro-daniel/bosque
+```bash
+composer require astro-daniel/bosque
