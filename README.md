@@ -5,6 +5,27 @@ Why Choose Bosque for Your Laravel Projects?
 
 Bosque is the perfect solution for Laravel developers looking for cleaner, more efficient, and reusable code. By integrating the AbstractService and AbstractDTO classes, the library provides powerful tools for model manipulation and data transfer within your applications.
 
-#install
+## Install
 ```bash
 composer require astro-daniel/bosque
+```
+
+## AbstractDTO
+First create a file and extend the Abstract DTO, for example:
+```php
+<?php
+
+namespace App\DTO;
+
+use AstroDaniel\Bosque\AbstractDTO;
+
+class UserDTO extends AbstractDTO
+{
+    public function __construct(
+        private readonly string $name,
+        private readonly string $email
+    ) {}
+}
+```
+
+
