@@ -3,7 +3,6 @@
 namespace AstroDaniel\Bosque;
 
 use AstroDaniel\Bosque\Interfaces\DTOInterface;
-use Illuminate\Support\Fluent;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -22,8 +21,9 @@ class AbstractDTO implements DTOInterface
       if ($this->verifyIfPropertyIsAccepted($property)) {
         continue;
       }
-      //====End Verify is blocked
-      //==== Start Veirfy Getter ====\\
+      //====End Verify is blocked ====\\
+
+      //==== Start Verify Getter ====\\
       $propertyName = $property->getName();
       $getterMethod = 'get' . ucfirst($propertyName);
 
@@ -34,7 +34,7 @@ class AbstractDTO implements DTOInterface
           continue;
         }
       }
-      //==== End Veirfy Getter ====\\
+      //==== End Verify Getter ====\\
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
@@ -50,7 +50,7 @@ class AbstractDTO implements DTOInterface
 
   public function toJson(): string
   {
-    return (new Fluent($this->toArray()))->toJson();
+    return json_encode(($this->toArray()));
   }
 
   private function verifyIfPropertyIsAccepted(ReflectionProperty $propertyToVerify): bool
