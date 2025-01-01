@@ -3,14 +3,10 @@
     "description": "a lib for services",
     "type": "library",
     "require-dev": {
-        "illuminate/support": "^11.0",
-        "illuminate/database": "^11.0",
         "pestphp/pest": "^3.5",
         "mockery/mockery": "^1.6"
     },
     "require" : {
-        "illuminate/support": "^11.0",
-        "illuminate/database": "^11.0"
     },
     "license": "MIT",
     "autoload": {
