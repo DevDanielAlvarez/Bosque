@@ -3,7 +3,6 @@
 namespace AstroDaniel\Bosque;
 
 use AstroDaniel\Bosque\Interfaces\DTOInterface;
-use Illuminate\Support\Fluent;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -50,7 +49,7 @@ class AbstractDTO implements DTOInterface
 
   public function toJson(): string
   {
-    return (new Fluent($this->toArray()))->toJson();
+    return json_encode(($this->toArray()));
   }
 
   private function verifyIfPropertyIsAccepted(ReflectionProperty $propertyToVerify): bool
