@@ -27,5 +27,53 @@ class UserDTO extends AbstractDTO
     ) {}
 }
 ```
+How to use dto
+#### To Array
+```php
+<?php
+$user = User::first();
+$userDTO = new UserDTO(name : $user->name, email : $user->email);
+dd($userDTO->toArray()); // [name : "Daniel", "email" : "ddd@ddd.com"]
+```
+#### To Json
+```php
+<?php
+$user = User::first();
+$userDTO = new UserDTO(name : $user->name, email : $user->email);
+dd($userDTO->toJson()); // "{"name":"Miss Shanelle Krajcik V","email":"iklein@example.com"}"
+```
+
+#### Except
+```php
+<?php
+$user = User::first();
+$userDTO = new UserDTO(name : $user->name, email : $user->email);
+dump($userDTO->except(properties: ['name'])->toJson()); //"{"email":"iklein@example.com"}"
+dd($userDTO->except(properties: ['email'])->toArray()); // ["name" : "Miss Shanelle Krajcik V"]
+```
+#### You can define getters that abstract DTO will understand
+```php
+<?php
+
+namespace App\DTO;
+
+use AstroDaniel\Bosque\AbstractDTO;
+
+class UserDTO extends AbstractDTO
+{
+    public function __construct(
+        private readonly string $name,
+        private readonly string $email
+    ) {}
+
+    public function getName() : string {
+        return strtoupper($this->name);
+    }
+}
+
+ $user = User::first();
+    $userDTO = new UserDTO(name : $user->name, email : $user->email);
+    dump($userDTO->except(['email'])->toArray()); //["name" => "MISS SHANELLE KRAJCIK V"]
+```
 
 
