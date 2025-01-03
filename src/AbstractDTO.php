@@ -48,13 +48,12 @@ class AbstractDTO implements DTOInterface
       //====End Verify is blocked ====\\
 
       //==== Start Verify Getter ====\\
-      $propertyName = $property->getName();
-      $getterMethod = 'get' . ucfirst($propertyName);
+      if ($this->hasGetterMethod($property,$reflection)) {
 
-      if ($reflection->hasMethod($getterMethod)) {
-        $method = $reflection->getMethod($getterMethod);
+        $method = $reflection->getMethod($this->getGetterMethodName($property));
+
         if ($method->isPublic()) {
-          $data[$propertyName] = $method->invoke($this);
+          $data[$property->getName()] = $method->invoke($this);
           continue;
         }
       }
@@ -65,7 +64,13 @@ class AbstractDTO implements DTOInterface
     $this->except = [];
     return $data;
   }
-
+  public function hasGetterMethod(ReflectionProperty $property,ReflectionClass $reflection): bool{
+    return $reflection->hasMethod($this->getGetterMethodName($property));
+  }
+  
+  public function getGetterMethodName(ReflectionProperty $property): string{
+    return 'get' . ucfirst($property->getName());
+  }
   /**
    * Set except properties
    * @param array $properties
