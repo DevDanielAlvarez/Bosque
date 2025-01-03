@@ -37,7 +37,6 @@ it('can get property as array except name', function () {
 
 it('can get property as json except age', function () {
   $propertiesAsJson = $this->fakeDTO->except(properties: ['age'])->toJson();
-  var_dump($propertiesAsJson);
   expect($propertiesAsJson)->toBe('{"name":"Daniel Alvarez de Almeida"}');
 });
 

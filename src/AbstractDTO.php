@@ -8,9 +8,33 @@ use ReflectionProperty;
 
 class AbstractDTO implements DTOInterface
 {
-  private array $except = [];
   /**
-   * return this properties as array
+   * Properties that will not be returned
+   * @var array
+   */
+  private array $except = [];
+
+  /**
+   * Set value in except property
+   * @param array $properties
+   * @return \AstroDaniel\Bosque\AbstractDTO
+   */
+  protected function setExcept(array $properties): self
+  {
+    $this->except = $properties;
+    return $this;
+  }
+  /**
+   * Get except property
+   * @return array
+   */
+  protected function getExcept(): array
+  {
+    return $this->except;
+  }
+  /**
+   * Return properties as array
+   * @return array
    */
   public function toArray(): array
   {
@@ -18,7 +42,7 @@ class AbstractDTO implements DTOInterface
     $data  = [];
     foreach ($reflection->getProperties() as $property) {
       //==== Start Verify is blocked ====\\
-      if ($this->verifyIfPropertyIsAccepted($property)) {
+      if ($this->isPropertyExcluded($property)) {
         continue;
       }
       //====End Verify is blocked ====\\
@@ -42,18 +66,27 @@ class AbstractDTO implements DTOInterface
     return $data;
   }
 
+  /**
+   * Set except properties
+   * @param array $properties
+   * @return \AstroDaniel\Bosque\AbstractDTO
+   */
   public function except(array $properties): self
   {
     $this->except = $properties;
     return $this;
   }
 
+  /**
+   * Return properties as json
+   * @return string
+   */
   public function toJson(): string
   {
     return json_encode(($this->toArray()));
   }
 
-  private function verifyIfPropertyIsAccepted(ReflectionProperty $propertyToVerify): bool
+  private function isPropertyExcluded(ReflectionProperty $propertyToVerify): bool
   {
     foreach ($this->except as $exceptField) {
       if ($propertyToVerify->getName() == $exceptField) {
