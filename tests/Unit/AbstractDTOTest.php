@@ -58,3 +58,10 @@ it('respect getter method', function () {
   expect($userDto->toArray()['name'])->toBe('DANIEL');
   expect($userDto->toJson())->toBeAbstract('{"name":DANIEL}');
 });
+
+it('can use magic getter method', function () {
+
+  expect($this->fakeDTO->getAge())->toBe(20);
+  expect(fn() => $this->fakeDTO->getEmail())->toThrow(BadMethodCallException::class);
+
+});

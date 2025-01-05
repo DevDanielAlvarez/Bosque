@@ -6,7 +6,7 @@ use AstroDaniel\Bosque\Interfaces\DTOInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
-class AbstractDTO implements DTOInterface
+abstract class AbstractDTO implements DTOInterface
 {
   /**
    * Properties that will not be returned
@@ -41,6 +41,7 @@ class AbstractDTO implements DTOInterface
     $reflection = new ReflectionClass($this);
     $data  = [];
     foreach ($reflection->getProperties() as $property) {
+
       //==== Start Verify is blocked ====\\
       if ($this->isPropertyExcluded($property)) {
         continue;
@@ -58,6 +59,9 @@ class AbstractDTO implements DTOInterface
         }
       }
       //==== End Verify Getter ====\\
+
+
+      //access property
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
@@ -99,5 +103,25 @@ class AbstractDTO implements DTOInterface
       }
     }
     return false;
+  }
+
+  public function __call(string $name, array $args)
+  {
+    // Check if the method is a getter
+    if (str_starts_with($name, 'get')) {
+      $propertyName = lcfirst(substr($name, 3));
+
+      if (property_exists($this, $propertyName)) {
+        $reflection = new ReflectionProperty($this, $propertyName);
+
+        if (!$reflection->isPublic()) {
+          $reflection->setAccessible(true);
+        }
+
+        return $reflection->getValue($this);
+      }
+    }
+
+    throw new \BadMethodCallException("Method {$name} does not exist.");
   }
 }
