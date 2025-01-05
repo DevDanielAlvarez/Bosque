@@ -37,7 +37,6 @@ it('can get property as array except name', function () {
 
 it('can get property as json except age', function () {
   $propertiesAsJson = $this->fakeDTO->except(properties: ['age'])->toJson();
-  var_dump($propertiesAsJson);
   expect($propertiesAsJson)->toBe('{"name":"Daniel Alvarez de Almeida"}');
 });
 
@@ -58,4 +57,11 @@ it('respect getter method', function () {
   };
   expect($userDto->toArray()['name'])->toBe('DANIEL');
   expect($userDto->toJson())->toBeAbstract('{"name":DANIEL}');
+});
+
+it('can use magic getter method', function () {
+
+  expect($this->fakeDTO->getAge())->toBe(20);
+  expect(fn() => $this->fakeDTO->getEmail())->toThrow(BadMethodCallException::class);
+
 });
