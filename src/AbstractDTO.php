@@ -6,54 +6,96 @@ use AstroDaniel\Bosque\Interfaces\DTOInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
-class AbstractDTO implements DTOInterface
+abstract class AbstractDTO implements DTOInterface
 {
-  private array $except = [];
   /**
-   * return this properties as array
+   * Properties that will not be returned
+   * @var array
+   */
+  private array $except = [];
+
+  /**
+   * Set value in except property
+   * @param array $properties
+   * @return \AstroDaniel\Bosque\AbstractDTO
+   */
+  protected function setExcept(array $properties): self
+  {
+    $this->except = $properties;
+    return $this;
+  }
+  /**
+   * Get except property
+   * @return array
+   */
+  protected function getExcept(): array
+  {
+    return $this->except;
+  }
+  /**
+   * Return properties as array
+   * @return array
    */
   public function toArray(): array
   {
     $reflection = new ReflectionClass($this);
     $data  = [];
     foreach ($reflection->getProperties() as $property) {
+
       //==== Start Verify is blocked ====\\
-      if ($this->verifyIfPropertyIsAccepted($property)) {
+      if ($this->isPropertyExcluded($property)) {
         continue;
       }
       //====End Verify is blocked ====\\
 
       //==== Start Verify Getter ====\\
-      $propertyName = $property->getName();
-      $getterMethod = 'get' . ucfirst($propertyName);
+      if ($this->hasGetterMethod($property,$reflection)) {
 
-      if ($reflection->hasMethod($getterMethod)) {
-        $method = $reflection->getMethod($getterMethod);
+        $method = $reflection->getMethod($this->getGetterMethodName($property));
+
         if ($method->isPublic()) {
-          $data[$propertyName] = $method->invoke($this);
+          $data[$property->getName()] = $method->invoke($this);
           continue;
         }
       }
       //==== End Verify Getter ====\\
+
+
+      //access property
       $property->setAccessible(true);
       $data[$property->getName()] = $property->getValue($this);
     }
     $this->except = [];
     return $data;
   }
-
+  public function hasGetterMethod(ReflectionProperty $property,ReflectionClass $reflection): bool{
+    return $reflection->hasMethod($this->getGetterMethodName($property));
+  }
+  
+  public function getGetterMethodName(ReflectionProperty $property): string{
+    return 'get' . ucfirst($property->getName());
+  }
+  /**
+   * Set except properties
+   * @param array $properties
+   * @return \AstroDaniel\Bosque\AbstractDTO
+   */
   public function except(array $properties): self
   {
     $this->except = $properties;
     return $this;
   }
 
+  /**
+   * Return properties as json
+   * @return string
+   */
   public function toJson(): string
   {
     return json_encode(($this->toArray()));
   }
 
-  private function verifyIfPropertyIsAccepted(ReflectionProperty $propertyToVerify): bool
+  private function isPropertyExcluded(ReflectionProperty $propertyToVerify): bool
   {
     foreach ($this->except as $exceptField) {
       if ($propertyToVerify->getName() == $exceptField) {
@@ -61,5 +103,25 @@ class AbstractDTO implements DTOInterface
       }
     }
     return false;
+  }
+
+  public function __call(string $name, array $args)
+  {
+    // Check if the method is a getter
+    if (str_starts_with($name, 'get')) {
+      $propertyName = lcfirst(substr($name, 3));
+
+      if (property_exists($this, $propertyName)) {
+        $reflection = new ReflectionProperty($this, $propertyName);
+
+        if (!$reflection->isPublic()) {
+          $reflection->setAccessible(true);
+        }
+
+        return $reflection->getValue($this);
+      }
+    }
+
+    throw new \BadMethodCallException("Method {$name} does not exist.");
   }
 }
