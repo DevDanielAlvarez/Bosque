@@ -49,7 +49,7 @@ abstract class AbstractDTO implements DTOInterface
       //====End Verify is blocked ====\\
 
       //==== Start Verify Getter ====\\
-      if ($this->hasGetterMethod($property,$reflection)) {
+      if ($this->hasGetterMethod($property, $reflection)) {
 
         $method = $reflection->getMethod($this->getGetterMethodName($property));
 
@@ -63,16 +63,24 @@ abstract class AbstractDTO implements DTOInterface
 
       //access property
       $property->setAccessible(true);
-      $data[$property->getName()] = $property->getValue($this);
+      $data[$this->convertToSnakeCase($property->getName())] = $property->getValue($this);
     }
     $this->except = [];
     return $data;
   }
-  public function hasGetterMethod(ReflectionProperty $property,ReflectionClass $reflection): bool{
+
+  private function convertToSnakeCase(string $string): string
+  {
+      return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $string));
+  }
+
+  protected function hasGetterMethod(ReflectionProperty $property, ReflectionClass $reflection): bool
+  {
     return $reflection->hasMethod($this->getGetterMethodName($property));
   }
-  
-  public function getGetterMethodName(ReflectionProperty $property): string{
+
+  protected function getGetterMethodName(ReflectionProperty $property): string
+  {
     return 'get' . ucfirst($property->getName());
   }
   /**

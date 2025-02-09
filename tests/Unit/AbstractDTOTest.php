@@ -65,3 +65,35 @@ it('can use magic getter method', function () {
   expect(fn() => $this->fakeDTO->getEmail())->toThrow(BadMethodCallException::class);
 
 });
+
+it('can convert property name to camel case', function(){
+  $productDTO = new class(20.5) extends AbstractDTO{
+    public function __construct(private float $availableQuantity){}
+  };
+
+  expect($productDTO->toArray()['available_quantity'])->toBe(20.5);
+});
+
+it('massive test', function(){
+
+  class PostDTO extends AbstractDTO{
+    public function __construct(private string $title, private string $createdBy, private string $createdAt){
+
+    }
+
+    public function getTitle(): string{
+      return 'Title: ' . $this->title;
+    }
+  }
+
+  $postDTO = new PostDTO('My New Car', 'Daniel Alvarez','03-03-2025');
+
+  expect($postDTO->toArray())->toBe([
+    'title' => 'Title: My New Car',
+    'created_by' => 'Daniel Alvarez',
+    'created_at' => '03-03-2025'
+  ]);
+
+  expect($postDTO->toJson())->toBe('{"title":"Title: My New Car","created_by":"Daniel Alvarez","created_at":"03-03-2025"}');
+
+});
